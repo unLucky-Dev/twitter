@@ -55,8 +55,7 @@ const LoginComponent = () => {
                     onKeyDown={(e) => { if (e.key === 'Enter') handleNextClick() }}
                 />
                 <Button label='Next' lableClass='btnLabel' className='btn2' onClick={handleNextClick} />
-                {/* change app state to forgot password */}
-                <Button label='Forgot password?' lableClass='btnLabel' className='btn2 btn3' />
+                <Button label='Forgot password?' lableClass='btnLabel' className='btn2 btn3' onClick={() => changeAppState(AppStates.FORGOT_PASSWORD)} />
                 <div className='signUpText'>
                     <span>Don't have an account?</span>
                     &nbsp;

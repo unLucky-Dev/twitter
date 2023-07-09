@@ -8,6 +8,8 @@ import React from 'react';
 import { userLogo } from '../../Icons/DefaultUserLogo';
 import { addUser } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
+import ShowPassword from '../../Icons/showPassword';
+import HidePassword from '../../Icons/HidePassword';
 
 const CreateAccountComponent = () => {
     document.title = 'Sign up for Twitter/Twitter';
@@ -19,6 +21,8 @@ const CreateAccountComponent = () => {
     const [dob, setDob] = useState('');
     const [isBtnDisabled, setIsBtnDisabled] = useState(true);
     const [profileImage, setProfileImage] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleConfirmPassword = (e) => {
         const confirmPassword = e.target.value;
@@ -72,6 +76,11 @@ const CreateAccountComponent = () => {
     const handleImageSelected = (e) => {
         const fileList = e.target.files;
         if (fileList.length) {
+            const file = fileList[0];
+            if (file.size / 1024 > 1024) {
+                showMessageToast(toastTypes.WARN, 'Image size should be less than 1mb.');
+                return;
+            }
             const reader = new FileReader();
             reader.readAsDataURL(fileList[0]);
             reader.onload = () => {
@@ -98,14 +107,29 @@ const CreateAccountComponent = () => {
 
     const handlePasswordChange = (e) => {
         const enteredPassword = e.target.value;
-        if (confPassword && enteredPassword !== confPassword)
+        const isNotMatched = confPassword && enteredPassword !== confPassword;
+        if (isNotMatched)
             document.getElementById('confirmPassInput')?.classList.add('error');
         else
             document.getElementById('confirmPassInput')?.classList.remove('error');
+
+        if (enteredPassword && enteredPassword.length >= 8)
+            e.target?.classList.remove('error');
+        else if (enteredPassword && enteredPassword.length < 8)
+            e.target?.classList.add('error');
+
         setPassword(enteredPassword);
+        setIsBtnDisabled(Boolean(isNotMatched));
     }
 
-    const isSignUpDisabled = isBtnDisabled || !(name && password && phone && dob);
+    const inputFieldIcon = (value, changeState) => {
+        if (value)
+            return <HidePassword className='textFieldIcon' cursor='pointer' onClick={() => changeState(false)} />
+        if (!value)
+            return <ShowPassword className='textFieldIcon' cursor='pointer' onClick={() => changeState(true)} />
+    }
+
+    const isSignUpDisabled = isBtnDisabled || !(name && password && phone && dob && password.length >= 8);
 
     return (
         <div className='loginContentContainer'>
@@ -114,15 +138,24 @@ const CreateAccountComponent = () => {
                     <h1>Create your account</h1>
                     <div className='imageDiv' onClick={handleImgUpload}>
                         <input id='imgUploadBtn' type="file" accept="image/jpeg, image/png, image/jpg" onChange={handleImageSelected} hidden />
-                        <img src={profileImage ?? userLogo} height='72px' width='72px' alt='click to change.' />
+                        <img src={profileImage ?? userLogo} height='75px' alt='click to change.' />
                     </div>
                 </div>
                 <TextField placeholder='Name' onChange={(e) => { setName(e.target.value) }} />
                 <TextField placeholder='Phone' type='number' onChange={handlePhoneChange} />
                 <TextField placeholder='Date of birth' type='text' onFocus={(e) => { e.target.type = 'date' }}
                     onBlur={(e) => { if (e.target.value === '') e.target.type = 'text' }} onChange={handleDOBChange} />
-                <TextField placeholder='Passsword' type='password' onChange={handlePasswordChange} />
-                <TextField id='confirmPassInput' placeholder='Confirm password' type='password' onChange={handleConfirmPassword} />
+                <TextField
+                    placeholder='Passsword (Must contain atleast 8 characters)'
+                    type={showPassword ? 'text' : 'password'} onChange={handlePasswordChange}
+                    icon={() => inputFieldIcon(showPassword, setShowPassword)}
+                />
+                <TextField
+                    id='confirmPassInput'
+                    placeholder='Confirm password'
+                    type={showConfirmPassword ? 'text' : 'password'} onChange={handleConfirmPassword}
+                    icon={() => inputFieldIcon(showConfirmPassword, setShowConfirmPassword)}
+                />
                 <Button label='Sign Up' lableClass='btnLabel' disabled={isSignUpDisabled} onClick={handleSignUp} />
                 <div className='loginText'>
                     <span>Have an account already?</span>

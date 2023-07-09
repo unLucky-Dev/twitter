@@ -63,8 +63,7 @@ const LoginPasswordComponent = () => {
                     icon={inputFieldIcon}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleLogin() }}
                 />
-                {/* change app state to forgot password */}
-                <span className='forgotPasswordAction'>Forgot password?</span>
+                <span className='forgotPasswordAction' onClick={() => changeAppState(AppStates.FORGOT_PASSWORD)}>Forgot password?</span>
                 <Button label='Log in' lableClass='btnLabel loginLabel' className='btn2 loginBtn' disabled={isLoginDisabled} onClick={handleLogin} />
                 <div className='signUpText signUp2'>
                     <span>Don't have an account?</span>

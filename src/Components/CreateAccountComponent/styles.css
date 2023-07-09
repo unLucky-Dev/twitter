@@ -35,9 +35,11 @@
 }
 
 .imageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
     overflow: hidden;
-    border: 1px solid white;
     width: 72px;
     height: 72px;
     cursor: pointer;

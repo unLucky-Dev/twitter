@@ -9,26 +9,31 @@ import CreateAccountComponent from './Components/CreateAccountComponent';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoginPasswordComponent from './Components/LoginPasswordComponent';
+import ForgotPasswordComponent from './Components/ForgotPasswordComponent';
+import ChangePasswordComponent from './Components/ChangePasswordComponent';
 
 function App() {
   const [state, setState] = React.useState<string>(AppStates.LOGIN);
   const [username, setUsername] = React.useState<string>('');
+  const [dob, setDob] = React.useState<string>('');
 
   const changeAppState = (appState) => {
-    if (appState !== AppStates.LOGIN_PASSWORD)
+    if (![AppStates.LOGIN_PASSWORD, AppStates.CHANGE_PASSWORD, AppStates.FORGOT_PASSWORD].includes(appState))
       setUsername('');
     setState(appState);
-  }
+  };
 
   return (
     <div className='root'>
       <div className='loginSignupDiv'>
-        <Context.Provider value={{ changeAppState, setUsername, username }}>
+        <Context.Provider value={{ changeAppState, setUsername, username, dob, setDob }}>
           <HeaderComponent />
           {state === AppStates.LOGIN && <LoginComponent />}
           {state === AppStates.LOGIN_PASSWORD && <LoginPasswordComponent />}
           {state === AppStates.SIGNUP && <SignupComponent />}
           {state === AppStates.CREATE_ACCOUNT && <CreateAccountComponent />}
+          {state === AppStates.FORGOT_PASSWORD && <ForgotPasswordComponent />}
+          {state === AppStates.CHANGE_PASSWORD && <ChangePasswordComponent />}
         </Context.Provider>
         <ToastContainer />
       </div>
@@ -36,14 +41,4 @@ function App() {
   );
 }
 
-export default App;
-
-
-
-
-
-
-
-
-// issue 1 -> open choose file & close without choosing
-//issue 2 -> cannot post base64 in payload
+  export default App;
