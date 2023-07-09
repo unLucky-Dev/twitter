@@ -1,0 +1,19 @@
+.loginHeader {
+  display: flex;
+  flex-direction: row;
+  margin: 0 16px;
+  align-items: center;
+}
+
+.loginHeader .closeIconDiv {
+  height: 20px;
+  width: 20px;
+}
+
+.loginHeader .logoDiv {
+  height: 53px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  margin-left: 249px;
+}

@@ -1,0 +1,18 @@
+.root {
+  background-color: rgb(36, 45, 52);
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.loginSignupDiv {
+  background-color: black;
+  width: 600px;
+  height: 650px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+}

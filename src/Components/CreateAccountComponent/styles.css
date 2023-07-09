@@ -1,0 +1,44 @@
+.createAccountContainer {
+    margin: 0 !important;
+    padding: 0 80px !important;
+}
+
+.loginText {
+    color: rgb(113, 118, 123);
+    margin-top: 12px;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: inherit;
+    line-height: 20px;
+}
+
+.loginText .loginAction {
+    color: #1D9BF0;
+}
+
+.loginText .loginAction:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.agreementText {
+    color: rgb(113, 118, 123);
+    font-size: 13px;
+    font-weight: 400;
+    font-family: inherit;
+    line-height: 16px;
+}
+
+.headerWithImage {
+    display: flex;
+    justify-content: space-between;
+}
+
+.imageDiv {
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid white;
+    width: 72px;
+    height: 72px;
+    cursor: pointer;
+}

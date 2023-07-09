@@ -1,0 +1,124 @@
+.loginContentContainer {
+    height: 536px;
+}
+
+.loginContentContainer .loginContentDiv {
+    display: flex;
+    flex-direction: column;
+    margin: 0 118px;
+    padding: 0 32px 48px 32px;
+}
+
+.loginContentDiv h1 {
+    font-size: 31px;
+    font-weight: 700;
+    color: white;
+    font-family: math;
+    margin: 20px 0;
+}
+
+.loginContentDiv .btn {
+    display: flex;
+    background-color: white;
+    height: 38px;
+    border-radius: 20px;
+    border: 1px solid rgb(218, 220, 224);
+    justify-content: center;
+    align-items: center;
+    margin: 12px 0;
+}
+
+
+
+.loginContentDiv .btn:hover {
+    cursor: pointer;
+    background-color: rgb(215, 219, 220);
+}
+
+.btn .btnContainer {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn .btnLogo {
+    height: 18px;
+    width: 18px;
+    margin-right: 8px;
+}
+
+.btn .btnLogo2 {
+    height: 20px;
+    width: 20px;
+    margin-right: 4px;
+}
+
+.btn span {
+    font-family: inherit;
+    font-weight: 500;
+    color: #3c4043;
+    font-size: 14px;
+}
+
+.btn .btnLabel {
+    font-family: inherit;
+    font-weight: 700;
+    color: black;
+    font-size: 15px;
+}
+
+.line {
+    background-color: #333639;
+    width: 100%;
+    height: 1px;
+    margin: 8px 4px;
+}
+
+.orDivider {
+    display: flex;
+    align-items: center;
+}
+
+.orDivider span {
+    margin: 0 4px;
+    color: white;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.btn2 {
+    height: 34px !important;
+}
+
+.btn3 {
+    background-color: transparent !important;
+    border: 1px solid #536471 !important;
+}
+
+.btn3:hover {
+    background-color: rgba(239, 243, 244, 0.1) !important;
+}
+
+.btn3 .btnLabel {
+    color: white;
+}
+
+.signUpText {
+    color: rgb(113, 118, 123);
+    margin-top: 40px;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: inherit;
+    line-height: 20px;
+}
+
+.signUpText .signUpAction {
+    color: #1D9BF0;
+}
+
+.signUpText .signUpAction:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
