@@ -3,7 +3,7 @@ import Button from '../Button';
 import TextField from '../TextField';
 import { useContext, useState } from 'react';
 import Context from '../../store/context';
-import { AppStates, toastTypes } from '../../Constants/constants';
+import { LoginAppStates, toastTypes } from '../../Constants/constants';
 import { updatePassword } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
 import React from 'react';
@@ -11,25 +11,27 @@ import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
 
 const ChangePasswordComponent = () => {
-    const { changeAppState, username, dob } = useContext(Context);
+    const { changeAppState, userDetails, showLoader } = useContext(Context);
     const [password, setPassword] = useState('');
     const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [confPassword, setConfPassword] = useState('');
     const isSubmitDisabled = isSubmitBtnDisabled || password !== confPassword || !password || password.length < 8;
+    const { username, dob } = userDetails;
 
     const handleFinish = async () => {
         setIsSubmitBtnDisabled(true);
+        showLoader(true);
         try {
             const response: any = await updatePassword({ username, password, dob });
             if (response?.status === 200) {
                 showMessageToast(toastTypes.SUCCESS, `${response.data} Login to continue.`);
-                changeAppState(AppStates.LOGIN);
+                changeAppState(LoginAppStates.LOGIN);
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
-                changeAppState(AppStates.FORGOT_PASSWORD);
+                changeAppState(LoginAppStates.FORGOT_PASSWORD);
             }
             else
                 showMessageToast(toastTypes.ERROR, response.error ?? 'Something went wrong. Please try again.');
@@ -40,6 +42,7 @@ const ChangePasswordComponent = () => {
         }
         finally {
             setIsSubmitBtnDisabled(false);
+            showLoader(false);
         }
     }
 

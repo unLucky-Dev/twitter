@@ -3,7 +3,7 @@ import Button from '../../Components/Button';
 import TextField from '../../Components/TextField';
 import { useContext, useState } from 'react';
 import Context from '../../store/context';
-import { AppStates, toastTypes } from '../../Constants/constants';
+import { LoginAppStates, toastTypes } from '../../Constants/constants';
 import { validateUser } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
 import React from 'react';
@@ -11,17 +11,22 @@ import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
 
 const LoginPasswordComponent = () => {
-    const { changeAppState, username } = useContext(Context);
+    const { changeAppState, userDetails, setIsUserAuthorized, setUserDetails, showLoader } = useContext(Context);
     const [password, setPassword] = useState('');
     const [isLoginDisabled, setIsLoginDisabled] = useState<boolean>(true);
     const [showPassword, setShowPassword] = useState(false);
+    const { username } = userDetails;
 
     const handleLogin = async () => {
         setIsLoginDisabled(true);
+        showLoader(true);
         try {
             const response: any = await validateUser({ username, password });
             if (response?.status === 200) {
-                //change app state to profile
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
+                setUserDetails(response.data);
+                setIsUserAuthorized(true);
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
@@ -35,6 +40,7 @@ const LoginPasswordComponent = () => {
         }
         finally {
             setIsLoginDisabled(false);
+            showLoader(false);
         }
     }
 
@@ -63,12 +69,12 @@ const LoginPasswordComponent = () => {
                     icon={inputFieldIcon}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleLogin() }}
                 />
-                <span className='forgotPasswordAction' onClick={() => changeAppState(AppStates.FORGOT_PASSWORD)}>Forgot password?</span>
+                <span className='forgotPasswordAction' onClick={() => changeAppState(LoginAppStates.FORGOT_PASSWORD)}>Forgot password?</span>
                 <Button label='Log in' lableClass='btnLabel loginLabel' className='btn2 loginBtn' disabled={isLoginDisabled} onClick={handleLogin} />
                 <div className='signUpText signUp2'>
                     <span>Don't have an account?</span>
                     &nbsp;
-                    <span className='signUpAction' onClick={() => { changeAppState(AppStates.SIGNUP) }}>Sign up</span>
+                    <span className='signUpAction' onClick={() => { changeAppState(LoginAppStates.SIGNUP) }}>Sign up</span>
                 </div>
             </div>
         </div>

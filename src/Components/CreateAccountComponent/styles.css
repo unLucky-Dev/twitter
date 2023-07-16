@@ -44,3 +44,22 @@
     height: 72px;
     cursor: pointer;
 }
+
+.removeProfilePic {
+    display: none;
+    position: absolute;
+    height: 16px;
+    border: 1px solid #a0a0a0b8;
+    border-radius: 50%;
+    margin-bottom: 60px;
+    margin-left: 60px;
+    background: #8a8a8ab8;
+}
+
+.profileImg:hover + .removeProfilePic {
+    display: block;
+}
+
+.removeProfilePic:hover {
+    display: block;
+}

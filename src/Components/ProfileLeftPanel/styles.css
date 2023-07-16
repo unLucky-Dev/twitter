@@ -1,0 +1,131 @@
+.leftPanelDiv {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    flex: 1 0 auto;
+    min-width: 250px;
+    padding: 16px 0;
+}
+
+.menuItem {
+    display: flex;
+    align-items: center;
+    color: white;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.menuItem.active {
+    background-color: #181818;
+    border-radius: 32px;
+    font-weight: 700;
+    font-size: 17px;
+}
+
+.menuItem:hover {
+    background-color: #181818;
+    border-radius: 32px;
+}
+
+.menuItemLogo {
+    fill: white;
+    height: 30px;
+}
+
+.twitterLogo {
+    fill: white;
+    height: 32px;
+    padding-left: 12px;
+    margin-bottom: 48px;
+}
+
+.tweetBtn {
+    width: 200px;
+    height: 40px;
+    background-color: #1D9BF0;
+    border: 0;
+}
+
+.tweetBtn:hover {
+    background-color: rgb(26, 140, 216);
+}
+
+.tweetLabel {
+    color: white !important;
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    line-height: 20px;
+}
+
+.userDetailDiv {
+    display: flex;
+    width: 90%;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    margin-top: auto;
+}
+
+.userProfileDetailDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+.userDetailDiv:hover {
+    cursor: pointer;
+    background-color: #181818;
+    border-radius: 45px;
+}
+
+.userUserName {
+    color: rgb(113, 118, 123);
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.userName {
+    color: rgb(231, 233, 234);
+    font-size: 15px;
+    font-weight: 700;
+    width: 130px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap: nowrap;
+}
+
+.userDetailDiv .imageDiv {
+    height: 48px;
+    width: 48px;
+}
+
+.logoutDiv {
+    display: flex;
+    margin-bottom: 12px;
+    margin-top: auto;
+    border-radius: 8px;
+    height: 60px;
+    width: calc(100% - 16px);
+    align-items: center;
+    background-color: black;
+    box-shadow: 0 0 5px 0 white;
+    position: sticky;
+}
+
+.logOutBtn {
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 20px;
+    padding: 12px;
+    overflow: hidden;
+    width: 210px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.logOutBtn:hover {
+    background-color: rgb(22,24,28);
+}

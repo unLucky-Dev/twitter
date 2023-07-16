@@ -2,7 +2,7 @@ import './styles.css';
 import Button from '../Button';
 import { useContext, useState } from 'react';
 import Context from '../../store/context';
-import { AppStates, toastTypes } from '../../Constants/constants';
+import { LoginAppStates, toastTypes } from '../../Constants/constants';
 import TextField from '../TextField';
 import React from 'react';
 import { userLogo } from '../../Icons/DefaultUserLogo';
@@ -10,10 +10,11 @@ import { addUser } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
 import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
+import CloseIcon from '../../Icons/CloseIcon';
 
 const CreateAccountComponent = () => {
     document.title = 'Sign up for Twitter/Twitter';
-    const { changeAppState } = useContext(Context);
+    const { changeAppState, showLoader } = useContext(Context);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
@@ -48,13 +49,14 @@ const CreateAccountComponent = () => {
     }
 
     const handleSignUp = async () => {
+        showLoader(true);
         showMessageToast(toastTypes.INFO, 'Creating Account...', 200);
         const payload = { name, username: phone, dob, password, profileImage };
         try {
             const response: any = await addUser(payload);
             if (response?.status === 201) {
                 showMessageToast(toastTypes.SUCCESS, 'Account created successfully. Login to Continue.', 500);
-                changeAppState(AppStates.LOGIN);
+                changeAppState(LoginAppStates.LOGIN);
             }
             else if (response?.status === 413) {
                 showMessageToast(toastTypes.ERROR, 'Image size is too large.');
@@ -65,6 +67,9 @@ const CreateAccountComponent = () => {
         catch (e) {
             showMessageToast(toastTypes.ERROR, 'Something went wrong. Please try again.');
             console.log('error in handleSignUp', e);
+        }
+        finally {
+            showLoader(false);
         }
     }
 
@@ -136,9 +141,10 @@ const CreateAccountComponent = () => {
             <div className='loginContentDiv createAccountContainer'>
                 <div className='headerWithImage'>
                     <h1>Create your account</h1>
-                    <div className='imageDiv' onClick={handleImgUpload}>
+                    <div className='imageDiv'>
                         <input id='imgUploadBtn' type="file" accept="image/jpeg, image/png, image/jpg" onChange={handleImageSelected} hidden />
-                        <img src={profileImage ?? userLogo} height='75px' alt='click to change.' />
+                        <img className='profileImg' src={profileImage ?? userLogo} height='75px' alt='click to change.' onClick={handleImgUpload} />
+                        {profileImage && <CloseIcon className='removeProfilePic' fill='white' cursor='pointer' onClick={() => setProfileImage(null)} />}
                     </div>
                 </div>
                 <TextField placeholder='Name' onChange={(e) => { setName(e.target.value) }} />
@@ -160,7 +166,7 @@ const CreateAccountComponent = () => {
                 <div className='loginText'>
                     <span>Have an account already?</span>
                     &nbsp;
-                    <span className='loginAction' onClick={() => { changeAppState(AppStates.LOGIN) }}>Log in</span>
+                    <span className='loginAction' onClick={() => { changeAppState(LoginAppStates.LOGIN) }}>Log in</span>
                 </div>
             </div>
         </div>

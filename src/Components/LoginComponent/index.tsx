@@ -5,23 +5,25 @@ import Button from '../../Components/Button';
 import TextField from '../../Components/TextField';
 import { useContext, useState } from 'react';
 import Context from '../../store/context';
-import { AppStates, toastTypes } from '../../Constants/constants';
+import { LoginAppStates, toastTypes } from '../../Constants/constants';
 import { checkUser } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
 import React from 'react';
 
 const LoginComponent = () => {
     document.title = 'Log in to Twitter/Twitter';
-    const { changeAppState, username, setUsername } = useContext(Context);
+    const { changeAppState, userDetails, setUserDetails, showLoader } = useContext(Context);
     const [isValidating, setIsValidating] = useState(false);
+    const { username } = userDetails;
 
     const handleNextClick = async () => {
         if (!username || isValidating) return;
+        showLoader(true);
         try {
             setIsValidating(true);
             const response: any = await checkUser({ username });
             if (response?.status === 200) {
-                changeAppState(AppStates.LOGIN_PASSWORD);
+                changeAppState(LoginAppStates.LOGIN_PASSWORD);
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
@@ -35,6 +37,7 @@ const LoginComponent = () => {
         }
         finally {
             setIsValidating(false);
+            showLoader(false);
         }
     }
 
@@ -51,15 +54,15 @@ const LoginComponent = () => {
                 </div>
                 <TextField
                     placeholder='Phone, email or username'
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setUserDetails({ ...userDetails, username: e.target.value })}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleNextClick() }}
                 />
                 <Button label='Next' lableClass='btnLabel' className='btn2' onClick={handleNextClick} />
-                <Button label='Forgot password?' lableClass='btnLabel' className='btn2 btn3' onClick={() => changeAppState(AppStates.FORGOT_PASSWORD)} />
+                <Button label='Forgot password?' lableClass='btnLabel' className='btn2 btn3' onClick={() => changeAppState(LoginAppStates.FORGOT_PASSWORD)} />
                 <div className='signUpText'>
                     <span>Don't have an account?</span>
                     &nbsp;
-                    <span className='signUpAction' onClick={() => { changeAppState(AppStates.SIGNUP) }}>Sign up</span>
+                    <span className='signUpAction' onClick={() => { changeAppState(LoginAppStates.SIGNUP) }}>Sign up</span>
                 </div>
             </div>
         </div>

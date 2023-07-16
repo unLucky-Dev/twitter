@@ -1,4 +1,4 @@
-export const AppStates = {
+export const LoginAppStates = {
     LOGIN: 'login',
     SIGNUP: 'signup',
     CREATE_ACCOUNT: 'create account',
@@ -12,4 +12,11 @@ export const toastTypes = {
     SUCCESS: 'SUCCESS',
     INFO: 'INFO',
     WARN: 'WARN',
+};
+
+export const profileMenu = {
+    HOME: 'Home',
+    SEARCH: 'Search',
+    NOTIFICATION: 'Notification',
+    PROFILE: 'Profile',
 };

@@ -3,18 +3,20 @@ import Button from '../Button';
 import TextField from '../TextField';
 import { useContext, useState } from 'react';
 import Context from '../../store/context';
-import { AppStates, toastTypes } from '../../Constants/constants';
+import { LoginAppStates, toastTypes } from '../../Constants/constants';
 import { checkUser } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
 import React from 'react';
 
 const ForgotPasswordComponent = () => {
-    const { changeAppState, username, setUsername, dob, setDob } = useContext(Context);
+    const { changeAppState, userDetails, setUserDetails, showLoader } = useContext(Context);
     const [isValidating, setIsValidating] = useState(false);
     const [isUsernameValidated, setIsUsernameValidated] = useState(false);
+    const { username, dob } = userDetails;
 
     const handleNextClick = async () => {
         if (!username || isValidating) return;
+        showLoader(true);
         try {
             setIsValidating(true);
             const response: any = await checkUser({ username });
@@ -33,6 +35,7 @@ const ForgotPasswordComponent = () => {
         }
         finally {
             setIsValidating(false);
+            showLoader(false);
         }
     }
 
@@ -41,21 +44,22 @@ const ForgotPasswordComponent = () => {
         const isBeforeToday = (new Date(new Date().toDateString()).getTime() - new Date(date).getTime()) > 0;
         if (!date || isBeforeToday) {
             e.target.classList.remove('error');
-            setDob(date);
+            setUserDetails({ ...userDetails, dob: date });
         }
         else {
             e.target.classList.add('error');
-            setDob('');
+            setUserDetails({ ...userDetails, dob: '' });
         }
     }
 
     const validateUser = async () => {
         if (!dob || isValidating) return;
+        showLoader(true);
         try {
             setIsValidating(true);
             const response: any = await checkUser({ username, dob });
             if (response?.status === 200) {
-                changeAppState(AppStates.CHANGE_PASSWORD);
+                changeAppState(LoginAppStates.CHANGE_PASSWORD);
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
@@ -69,6 +73,7 @@ const ForgotPasswordComponent = () => {
         }
         finally {
             setIsValidating(false);
+            showLoader(false);
         }
     }
 
@@ -83,7 +88,7 @@ const ForgotPasswordComponent = () => {
                     disabled={isUsernameValidated}
                     placeholder='Phone, email or username'
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setUserDetails({ ...userDetails, username: e.target.value })}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleNextClick() }}
                 />
                 {isUsernameValidated &&

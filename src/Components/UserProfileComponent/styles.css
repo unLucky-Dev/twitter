@@ -1,0 +1,8 @@
+.userProfileDiv {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+    margin: 0px 550px;
+    height: 100%;
+}
