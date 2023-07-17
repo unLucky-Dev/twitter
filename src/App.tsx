@@ -15,14 +15,15 @@ import ChangePasswordComponent from './Components/ChangePasswordComponent';
 import showMessageToast from './Components/ToastMessage/toastMessage';
 import { validateUser } from './api/twitterService';
 import UserProfileComponent from './Components/UserProfileComponent';
+import { UserDetialsType } from './types/types';
 
 function App() {
   const [state, setState] = React.useState<string>('');
-  const [userDetails, setUserDetails] = React.useState<any>({});
+  const [userDetails, setUserDetails] = React.useState<UserDetialsType>({});
   const [isUserAuthorized, setIsUserAuthorized] = React.useState<boolean>(false);
   const [loader, showLoader] = React.useState<boolean>(false);
 
-  const changeAppState = (appState) => {
+  const changeAppState = (appState: string) => {
     if (![LoginAppStates.LOGIN_PASSWORD, LoginAppStates.CHANGE_PASSWORD, LoginAppStates.FORGOT_PASSWORD].includes(appState) && !isUserAuthorized) {
       setUserDetails({ ...userDetails, username: '' });
     }
@@ -34,10 +35,9 @@ function App() {
     setIsUserAuthorized(false);
     localStorage.clear();
     changeAppState(LoginAppStates.LOGIN);
-  }
+  };
 
-
-  const isValidateUser = async (username, password) => {
+  const isValidateUser = async (username: string, password: string) => {
     showLoader(true);
     try {
       const response: any = await validateUser({ username, password });
@@ -61,16 +61,15 @@ function App() {
   useEffect(() => {
     const username = localStorage.getItem('username');
     const password = localStorage.getItem('password');
-    if (!isUserAuthorized && username && password) {
+    if (!isUserAuthorized && username && password)
       isValidateUser(username, password);
-    }
     else
       changeAppState(LoginAppStates.LOGIN);
   }, [isUserAuthorized]);
 
   return (
     <div className='root'>
-      <Context.Provider value={{ changeAppState, userDetails, setUserDetails, setIsUserAuthorized, logOutHandler, showLoader }}>
+      <Context.Provider value={{ changeAppState, userDetails, setUserDetails, setIsUserAuthorized, logOutHandler, showLoader, loader }}>
         {
           Object.values(LoginAppStates).includes(state) && !isUserAuthorized && <div className='loginSignupDiv'>
             <HeaderComponent />

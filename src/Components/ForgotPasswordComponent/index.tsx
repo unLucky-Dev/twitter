@@ -9,14 +9,15 @@ import showMessageToast from '../ToastMessage/toastMessage';
 import React from 'react';
 
 const ForgotPasswordComponent = () => {
-    const { changeAppState, userDetails, setUserDetails, showLoader } = useContext(Context);
-    const [isValidating, setIsValidating] = useState(false);
-    const [isUsernameValidated, setIsUsernameValidated] = useState(false);
-    const { username, dob } = userDetails;
+    const { changeAppState, userDetails, setUserDetails, showLoader, loader } = useContext(Context);
+    const [isValidating, setIsValidating] = useState<boolean>(false);
+    const [isUsernameValidated, setIsUsernameValidated] = useState<boolean>(false);
+    const username = userDetails?.username;
+    const dob = userDetails?.dateOfBirth;
 
     const handleNextClick = async () => {
-        if (!username || isValidating) return;
-        showLoader(true);
+        if (!username || isValidating || loader) return;
+        showLoader?.(true);
         try {
             setIsValidating(true);
             const response: any = await checkUser({ username });
@@ -35,31 +36,32 @@ const ForgotPasswordComponent = () => {
         }
         finally {
             setIsValidating(false);
-            showLoader(false);
+            showLoader?.(false);
         }
     }
 
-    const handleDOBChange = (e) => {
-        const date = e.target.value;
+    const handleDOBChange = (e: React.MouseEvent<HTMLElement>) => {
+        const element = e.target as HTMLInputElement;
+        const date = element.value;
         const isBeforeToday = (new Date(new Date().toDateString()).getTime() - new Date(date).getTime()) > 0;
         if (!date || isBeforeToday) {
-            e.target.classList.remove('error');
-            setUserDetails({ ...userDetails, dob: date });
+            element.classList.remove('error');
+            setUserDetails?.({ ...userDetails, dateOfBirth: date });
         }
         else {
-            e.target.classList.add('error');
-            setUserDetails({ ...userDetails, dob: '' });
+            element.classList.add('error');
+            setUserDetails?.({ ...userDetails, dateOfBirth: '' });
         }
     }
 
     const validateUser = async () => {
         if (!dob || isValidating) return;
-        showLoader(true);
+        showLoader?.(true);
         try {
             setIsValidating(true);
             const response: any = await checkUser({ username, dob });
             if (response?.status === 200) {
-                changeAppState(LoginAppStates.CHANGE_PASSWORD);
+                changeAppState?.(LoginAppStates.CHANGE_PASSWORD);
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
@@ -73,7 +75,7 @@ const ForgotPasswordComponent = () => {
         }
         finally {
             setIsValidating(false);
-            showLoader(false);
+            showLoader?.(false);
         }
     }
 
@@ -88,8 +90,8 @@ const ForgotPasswordComponent = () => {
                     disabled={isUsernameValidated}
                     placeholder='Phone, email or username'
                     value={username}
-                    onChange={(e) => setUserDetails({ ...userDetails, username: e.target.value })}
-                    onKeyDown={(e) => { if (e.key === 'Enter') handleNextClick() }}
+                    onChange={(e: React.KeyboardEvent<HTMLElement>) => setUserDetails?.({ ...userDetails, username: (e.target as HTMLInputElement).value })}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => { if (e.key === 'Enter' && !loader) handleNextClick() }}
                 />
                 {isUsernameValidated &&
                     <>
@@ -99,9 +101,10 @@ const ForgotPasswordComponent = () => {
                         <TextField
                             placeholder='Date of birth'
                             type='text'
-                            onFocus={(e) => { e.target.type = 'date' }}
-                            onBlur={(e) => { if (e.target.value === '') e.target.type = 'text' }} onChange={handleDOBChange}
-                            onKeyDown={(e) => { if (e.key === 'Enter') validateUser() }}
+                            onFocus={(e: React.MouseEvent<HTMLElement>) => { (e.target as HTMLInputElement).type = 'date' }}
+                    onBlur={(e: React.MouseEvent<HTMLElement>) => { if ((e.target as HTMLInputElement).value === '') (e.target as HTMLInputElement).type = 'text' }}
+                    onChange={handleDOBChange}
+                            onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => { if (e.key === 'Enter' && !loader) validateUser() }}
                         /></>}
                 <div className='actionsDiv'>
                     {isUsernameValidated && <Button label='Back' lableClass='btnLabel loginLabel' className='btn2 btn3 nextBtn' onClick={() => setIsUsernameValidated(false)} />}

@@ -12,18 +12,18 @@ import React from 'react';
 
 const LoginComponent = () => {
     document.title = 'Log in to Twitter/Twitter';
-    const { changeAppState, userDetails, setUserDetails, showLoader } = useContext(Context);
-    const [isValidating, setIsValidating] = useState(false);
-    const { username } = userDetails;
+    const { changeAppState, userDetails, setUserDetails, showLoader, loader } = useContext(Context);
+    const [isValidating, setIsValidating] = useState<boolean>(false);
+    const username  = userDetails?.username;
 
     const handleNextClick = async () => {
-        if (!username || isValidating) return;
-        showLoader(true);
+        if (!username || isValidating || loader) return;
+        showLoader?.(true);
         try {
             setIsValidating(true);
             const response: any = await checkUser({ username });
             if (response?.status === 200) {
-                changeAppState(LoginAppStates.LOGIN_PASSWORD);
+                changeAppState?.(LoginAppStates.LOGIN_PASSWORD);
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
@@ -37,7 +37,7 @@ const LoginComponent = () => {
         }
         finally {
             setIsValidating(false);
-            showLoader(false);
+            showLoader?.(false);
         }
     }
 
@@ -54,15 +54,16 @@ const LoginComponent = () => {
                 </div>
                 <TextField
                     placeholder='Phone, email or username'
-                    onChange={(e) => setUserDetails({ ...userDetails, username: e.target.value })}
+                    onChange={(e) => setUserDetails?.({ ...userDetails, username: e.target.value })}
                     onKeyDown={(e) => { if (e.key === 'Enter') handleNextClick() }}
+                    disabled={loader}
                 />
-                <Button label='Next' lableClass='btnLabel' className='btn2' onClick={handleNextClick} />
-                <Button label='Forgot password?' lableClass='btnLabel' className='btn2 btn3' onClick={() => changeAppState(LoginAppStates.FORGOT_PASSWORD)} />
+                <Button label='Next' lableClass='btnLabel' className='btn2' onClick={handleNextClick} disabled={loader} />
+                <Button label='Forgot password?' lableClass='btnLabel' className='btn2 btn3' onClick={() => changeAppState?.(LoginAppStates.FORGOT_PASSWORD)} />
                 <div className='signUpText'>
                     <span>Don't have an account?</span>
                     &nbsp;
-                    <span className='signUpAction' onClick={() => { changeAppState(LoginAppStates.SIGNUP) }}>Sign up</span>
+                    <span className='signUpAction' onClick={() => { changeAppState?.(LoginAppStates.SIGNUP) }}>Sign up</span>
                 </div>
             </div>
         </div>

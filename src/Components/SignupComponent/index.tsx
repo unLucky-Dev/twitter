@@ -21,12 +21,12 @@ const SignupComponent = () => {
                     <span>or</span>
                     <div className='line' />
                 </div>
-                <Button label='Create account' lableClass='btnLabel' className='btn2' onClick={() => { changeAppState(LoginAppStates.CREATE_ACCOUNT) }} />
+                <Button label='Create account' lableClass='btnLabel' className='btn2' onClick={() => { changeAppState?.(LoginAppStates.CREATE_ACCOUNT) }} />
                 <span className='agreementText'>By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use.</span>
                 <div className='loginText'>
                     <span>Have an account already?</span>
                     &nbsp;
-                    <span className='loginAction' onClick={() => { changeAppState(LoginAppStates.LOGIN) }}>Log in</span>
+                    <span className='loginAction' onClick={() => { changeAppState?.(LoginAppStates.LOGIN) }}>Log in</span>
                 </div>
             </div>
         </div>

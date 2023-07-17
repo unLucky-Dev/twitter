@@ -7,7 +7,7 @@ import { profileMenu } from '../../Constants/constants';
 const UserProfileComponent = () => {
     document.title = 'Home/Twitter';
     const { userDetails } = useContext(Context);
-    const [activeProfileMenu, setprofileMenu] = useState(profileMenu.HOME);
+    const [activeProfileMenu, setprofileMenu] = useState<string>(profileMenu.HOME);
     return (
         <div className='userProfileDiv'>
             <ProfileLeftPanel activeProfileMenu={activeProfileMenu} changeProfileMenu={setprofileMenu} />

@@ -13,6 +13,7 @@ import ActiveSearchLogo from '../../Icons/ActiveSearchLogo';
 import ActiveNotificationLogo from '../../Icons/ActiveNotificationLogo';
 import ActiveProfileLogo from '../../Icons/ActiveProfileLogo';
 import { profileMenu } from '../../Constants/constants';
+import { ProfileLeftPanelType } from '../../types/types';
 
 const menuLogoMap = {
     HOME: {
@@ -33,7 +34,7 @@ const menuLogoMap = {
     }
 }
 
-const ProfileLeftPanel = ({ activeProfileMenu, changeProfileMenu }) => {
+const ProfileLeftPanel = ({ activeProfileMenu, changeProfileMenu }: ProfileLeftPanelType) => {
     const [isLogOutDivVisible, setIsLogOutDivVisible] = React.useState(false);
     const { userDetails, logOutHandler } = useContext(Context);
 
@@ -63,14 +64,14 @@ const ProfileLeftPanel = ({ activeProfileMenu, changeProfileMenu }) => {
                 }
                 <Button label="Tweet" className='tweetBtn' lableClass='tweetLabel' />
             </div>
-            {isLogOutDivVisible && <div id='logOutDiv' className='logoutDiv'><div className='logOutBtn' onClick={logOutHandler}>Log out @{userDetails.username}</div></div>}
+            {isLogOutDivVisible && <div id='logOutDiv' className='logoutDiv'><div className='logOutBtn' onClick={logOutHandler}>Log out @{userDetails?.username}</div></div>}
             <div className='userDetailDiv' onClick={handleUserDetailClick}>
                 <div className='imageDiv'>
-                    <img className='profileImg' src={userDetails.photo ?? userLogo} height='50px' alt='Profile' />
+                    <img className='profileImg' src={userDetails?.photo ?? userLogo} height='50px' alt='Profile' />
                 </div>
                 <div className='userProfileDetailDiv'>
-                    <div className='userName'>{userDetails.name?.toUpperCase()}</div>
-                    <div className='userUserName'>@{userDetails.username}</div>
+                    <div className='userName'>{userDetails?.name?.toUpperCase()}</div>
+                    <div className='userUserName'>@{userDetails?.username}</div>
                 </div>
             </div>
         </div>

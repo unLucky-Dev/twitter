@@ -1,6 +1,6 @@
 import './styles.css';
 import Button from '../Button';
-import { useContext, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import Context from '../../store/context';
 import { LoginAppStates, toastTypes } from '../../Constants/constants';
 import TextField from '../TextField';
@@ -14,49 +14,51 @@ import CloseIcon from '../../Icons/CloseIcon';
 
 const CreateAccountComponent = () => {
     document.title = 'Sign up for Twitter/Twitter';
-    const { changeAppState, showLoader } = useContext(Context);
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [password, setPassword] = useState('');
-    const [confPassword, setconfPassword] = useState('');
-    const [dob, setDob] = useState('');
-    const [isBtnDisabled, setIsBtnDisabled] = useState(true);
+    const { changeAppState, showLoader, loader } = useContext(Context);
+    const [name, setName] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [confPassword, setconfPassword] = useState<string>('');
+    const [dob, setDob] = useState<string>('');
+    const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(true);
     const [profileImage, setProfileImage] = useState<string | null>(null);
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
-    const handleConfirmPassword = (e) => {
-        const confirmPassword = e.target.value;
+    const handleConfirmPassword = (e: React.KeyboardEvent<HTMLElement>) => {
+        const element = e.target as HTMLInputElement;
+        const confirmPassword = element.value;
         const isMatched = confirmPassword === password;
         if (!isMatched)
-            e.target.classList.add('error');
+            element.classList.add('error');
         else
-            e.target.classList.remove('error');
+            element.classList.remove('error');
         setconfPassword(confirmPassword);
         setIsBtnDisabled(!isMatched);
     }
 
-    const handlePhoneChange = (e) => {
-        const phoneNumber = e.target.value;
+    const handlePhoneChange = (e: React.KeyboardEvent<HTMLElement>) => {
+        const element = e.target as HTMLInputElement;
+        const phoneNumber = element.value;
         if (phoneNumber.length > 0 && phoneNumber.length !== 10) {
-            e.target.classList.add('error');
+            element.classList.add('error');
             setPhone('');
         }
         else {
-            e.target.classList.remove('error');
+            element.classList.remove('error');
             setPhone(phoneNumber);
         }
     }
 
     const handleSignUp = async () => {
-        showLoader(true);
+        showLoader?.(true);
         showMessageToast(toastTypes.INFO, 'Creating Account...', 200);
         const payload = { name, username: phone, dob, password, profileImage };
         try {
             const response: any = await addUser(payload);
             if (response?.status === 201) {
                 showMessageToast(toastTypes.SUCCESS, 'Account created successfully. Login to Continue.', 500);
-                changeAppState(LoginAppStates.LOGIN);
+                changeAppState?.(LoginAppStates.LOGIN);
             }
             else if (response?.status === 413) {
                 showMessageToast(toastTypes.ERROR, 'Image size is too large.');
@@ -69,17 +71,18 @@ const CreateAccountComponent = () => {
             console.log('error in handleSignUp', e);
         }
         finally {
-            showLoader(false);
+            showLoader?.(false);
         }
     }
 
-    const handleImgUpload = (e) => {
+    const handleImgUpload = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation();
         document.getElementById('imgUploadBtn')?.click();
     }
 
-    const handleImageSelected = (e) => {
-        const fileList = e.target.files;
+    const handleImageSelected = (e: ChangeEvent) => {
+        const element = e.target as HTMLInputElement;
+        const fileList = element.files ?? [];
         if (fileList.length) {
             const file = fileList[0];
             if (file.size / 1024 > 1024) {
@@ -97,21 +100,23 @@ const CreateAccountComponent = () => {
         }
     }
 
-    const handleDOBChange = (e) => {
-        const date = e.target.value;
+    const handleDOBChange = (e: React.KeyboardEvent<HTMLElement>) => {
+        const element = e.target as HTMLInputElement;
+        const date = element.value;
         const isBeforeToday = (new Date(new Date().toDateString()).getTime() - new Date(date).getTime()) > 0;
         if (!date || isBeforeToday) {
-            e.target.classList.remove('error');
+            element.classList.remove('error');
             setDob(date);
         }
         else {
-            e.target.classList.add('error');
+            element.classList.add('error');
             setDob('');
         }
     }
 
-    const handlePasswordChange = (e) => {
-        const enteredPassword = e.target.value;
+    const handlePasswordChange = (e: React.KeyboardEvent<HTMLElement>) => {
+        const element = e.target as HTMLInputElement;
+        const enteredPassword = element.value;
         const isNotMatched = confPassword && enteredPassword !== confPassword;
         if (isNotMatched)
             document.getElementById('confirmPassInput')?.classList.add('error');
@@ -119,9 +124,9 @@ const CreateAccountComponent = () => {
             document.getElementById('confirmPassInput')?.classList.remove('error');
 
         if (enteredPassword && enteredPassword.length >= 8)
-            e.target?.classList.remove('error');
+            element?.classList.remove('error');
         else if (enteredPassword && enteredPassword.length < 8)
-            e.target?.classList.add('error');
+            element?.classList.add('error');
 
         setPassword(enteredPassword);
         setIsBtnDisabled(Boolean(isNotMatched));
@@ -147,26 +152,34 @@ const CreateAccountComponent = () => {
                         {profileImage && <CloseIcon className='removeProfilePic' fill='white' cursor='pointer' onClick={() => setProfileImage(null)} />}
                     </div>
                 </div>
-                <TextField placeholder='Name' onChange={(e) => { setName(e.target.value) }} />
-                <TextField placeholder='Phone' type='number' onChange={handlePhoneChange} />
-                <TextField placeholder='Date of birth' type='text' onFocus={(e) => { e.target.type = 'date' }}
-                    onBlur={(e) => { if (e.target.value === '') e.target.type = 'text' }} onChange={handleDOBChange} />
+                <TextField placeholder='Name' onChange={(e: React.KeyboardEvent<HTMLElement>) => { setName((e.target as HTMLInputElement).value) }} disabled={loader} />
+                <TextField placeholder='Phone' type='number' onChange={handlePhoneChange} disabled={loader} />
+                <TextField
+                    placeholder='Date of birth'
+                    type='text'
+                    onFocus={(e: React.MouseEvent<HTMLElement>) => { (e.target as HTMLInputElement).type = 'date' }}
+                    onBlur={(e: React.MouseEvent<HTMLElement>) => { if ((e.target as HTMLInputElement).value === '') (e.target as HTMLInputElement).type = 'text' }}
+                    onChange={handleDOBChange}
+                    disabled={loader}
+                />
                 <TextField
                     placeholder='Passsword (Must contain atleast 8 characters)'
                     type={showPassword ? 'text' : 'password'} onChange={handlePasswordChange}
                     icon={() => inputFieldIcon(showPassword, setShowPassword)}
+                    disabled={loader}
                 />
                 <TextField
                     id='confirmPassInput'
                     placeholder='Confirm password'
                     type={showConfirmPassword ? 'text' : 'password'} onChange={handleConfirmPassword}
                     icon={() => inputFieldIcon(showConfirmPassword, setShowConfirmPassword)}
+                    disabled={loader}
                 />
-                <Button label='Sign Up' lableClass='btnLabel' disabled={isSignUpDisabled} onClick={handleSignUp} />
+                <Button label='Sign Up' lableClass='btnLabel' disabled={isSignUpDisabled || loader} onClick={handleSignUp} />
                 <div className='loginText'>
                     <span>Have an account already?</span>
                     &nbsp;
-                    <span className='loginAction' onClick={() => { changeAppState(LoginAppStates.LOGIN) }}>Log in</span>
+                    <span className='loginAction' onClick={() => { changeAppState?.(LoginAppStates.LOGIN) }}>Log in</span>
                 </div>
             </div>
         </div>

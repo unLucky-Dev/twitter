@@ -1,7 +1,8 @@
 import React from 'react'
 import './styles.css';
+import { ButtonPropType } from './types';
 
-const Button = ({ label, logo, className, logoClass, lableClass, onClick, disabled }: any) => {
+const Button = ({ label, logo, className, logoClass, lableClass, onClick, disabled }: ButtonPropType) => {
     return (
         <div className={`btn ${className} ${disabled ? 'disabled' : ''}`} onClick={!disabled ? onClick : undefined}>
             <div className='btnContainer'>

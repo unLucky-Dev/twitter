@@ -11,27 +11,28 @@ import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
 
 const ChangePasswordComponent = () => {
-    const { changeAppState, userDetails, showLoader } = useContext(Context);
-    const [password, setPassword] = useState('');
+    const { changeAppState, userDetails, showLoader, loader } = useContext(Context);
+    const [password, setPassword] = useState<string>('');
     const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [confPassword, setConfPassword] = useState('');
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+    const [confPassword, setConfPassword] = useState<string>('');
     const isSubmitDisabled = isSubmitBtnDisabled || password !== confPassword || !password || password.length < 8;
-    const { username, dob } = userDetails;
+    const username = userDetails?.username;
+    const dob = userDetails?.dateOfBirth;
 
     const handleFinish = async () => {
         setIsSubmitBtnDisabled(true);
-        showLoader(true);
+        showLoader?.(true);
         try {
             const response: any = await updatePassword({ username, password, dob });
             if (response?.status === 200) {
                 showMessageToast(toastTypes.SUCCESS, `${response.data} Login to continue.`);
-                changeAppState(LoginAppStates.LOGIN);
+                changeAppState?.(LoginAppStates.LOGIN);
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
-                changeAppState(LoginAppStates.FORGOT_PASSWORD);
+                changeAppState?.(LoginAppStates.FORGOT_PASSWORD);
             }
             else
                 showMessageToast(toastTypes.ERROR, response.error ?? 'Something went wrong. Please try again.');
@@ -42,35 +43,37 @@ const ChangePasswordComponent = () => {
         }
         finally {
             setIsSubmitBtnDisabled(false);
-            showLoader(false);
+            showLoader?.(false);
         }
     }
 
-    const handleChangePassword = (e) => {
-        const enteredPassword = e.target.value;
+    const handleChangePassword = (e: React.KeyboardEvent<HTMLElement>) => {
+        const element = e.target as HTMLInputElement;
+        const enteredPassword = element.value;
         if (confPassword && enteredPassword !== confPassword)
             document.getElementById('confirmPassInput')?.classList.add('error');
         else
             document.getElementById('confirmPassInput')?.classList.remove('error');
 
         if (enteredPassword && enteredPassword.length >= 8)
-            e.target?.classList.remove('error');
+            element.classList.remove('error');
         else if (enteredPassword && enteredPassword.length < 8)
-            e.target?.classList.add('error');
+            element.classList.add('error');
 
         setPassword(enteredPassword);
     }
 
-    const handleConfirmPassword = (e) => {
-        const confirmPassword = e.target.value;
+    const handleConfirmPassword = (e: React.KeyboardEvent<HTMLElement>) => {
+        const element = e.target as HTMLInputElement;
+        const confirmPassword = element.value;
         if (confirmPassword !== password)
-            e.target.classList.add('error');
+            element.classList.add('error');
         else
-            e.target.classList.remove('error');
+            element.classList.remove('error');
         setConfPassword(confirmPassword);
     }
 
-    const inputFieldIcon = (value, changeState) => {
+    const inputFieldIcon = (value: boolean, changeState: (state: boolean) => void) => {
         if (value)
             return <HidePassword className='textFieldIcon' cursor='pointer' onClick={() => changeState(false)} />
         if (!value)
@@ -96,7 +99,7 @@ const ChangePasswordComponent = () => {
                     type={showConfirmPassword ? 'text' : 'password'}
                     onChange={handleConfirmPassword}
                     icon={() => inputFieldIcon(showConfirmPassword, setShowConfirmPassword)}
-                    onKeyDown={(e) => { if (e.key === 'Enter' && !isSubmitDisabled) handleFinish(); }}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => { if (e.key === 'Enter' && !loader) handleFinish(); }}
                 />
                 <Button label='Change Password' lableClass='btnLabel' className='btn2 changePassBtn' disabled={isSubmitDisabled} onClick={handleFinish} />
             </div>
