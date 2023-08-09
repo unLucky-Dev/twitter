@@ -1,20 +1,21 @@
 import './styles.css';
 import Button from '../Button';
-import { ChangeEvent, useContext, useState } from 'react';
-import Context from '../../store/context';
-import { LoginAppStates, toastTypes } from '../../Constants/constants';
+import { LoginAppStates, toastTypes } from '../../Constants';
 import TextField from '../TextField';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { userLogo } from '../../Icons/DefaultUserLogo';
 import { addUser } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
 import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
 import CloseIcon from '../../Icons/CloseIcon';
+import { useSelector, useDispatch } from 'react-redux';
+import * as ACTIONS from '../../store/actions';
 
 const CreateAccountComponent = () => {
     document.title = 'Sign up for Twitter/Twitter';
-    const { changeAppState, showLoader, loader } = useContext(Context);
+    const loader = useSelector((state: any) => state.commonStore.loader);
+    const dispatch = useDispatch();
     const [name, setName] = useState<string>('');
     const [phone, setPhone] = useState<string>('');
     const [password, setPassword] = useState<string>('');
@@ -51,14 +52,14 @@ const CreateAccountComponent = () => {
     }
 
     const handleSignUp = async () => {
-        showLoader?.(true);
+        dispatch(ACTIONS.updateLoaderState(true));
         showMessageToast(toastTypes.INFO, 'Creating Account...', 200);
         const payload = { name, username: phone, dob, password, profileImage };
         try {
             const response: any = await addUser(payload);
             if (response?.status === 201) {
                 showMessageToast(toastTypes.SUCCESS, 'Account created successfully. Login to Continue.', 500);
-                changeAppState?.(LoginAppStates.LOGIN);
+                dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN));
             }
             else if (response?.status === 413) {
                 showMessageToast(toastTypes.ERROR, 'Image size is too large.');
@@ -71,7 +72,7 @@ const CreateAccountComponent = () => {
             console.log('error in handleSignUp', e);
         }
         finally {
-            showLoader?.(false);
+            dispatch(ACTIONS.updateLoaderState(false));
         }
     }
 
@@ -179,7 +180,7 @@ const CreateAccountComponent = () => {
                 <div className='loginText'>
                     <span>Have an account already?</span>
                     &nbsp;
-                    <span className='loginAction' onClick={() => { changeAppState?.(LoginAppStates.LOGIN) }}>Log in</span>
+                    <span className='loginAction' onClick={() => dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN))}>Log in</span>
                 </div>
             </div>
         </div>

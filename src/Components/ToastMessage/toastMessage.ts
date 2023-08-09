@@ -1,5 +1,5 @@
 import { ToastOptions, toast } from 'react-toastify';
-import { toastTypes } from '../../Constants/constants';
+import { toastTypes } from '../../Constants';
 
 const tsConfig: ToastOptions = {
     position: "bottom-left",

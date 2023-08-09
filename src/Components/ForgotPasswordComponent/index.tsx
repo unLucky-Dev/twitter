@@ -1,15 +1,17 @@
 import './styles.css';
 import Button from '../Button';
 import TextField from '../TextField';
-import { useContext, useState } from 'react';
-import Context from '../../store/context';
-import { LoginAppStates, toastTypes } from '../../Constants/constants';
+import { LoginAppStates, toastTypes } from '../../Constants';
 import { checkUser } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import * as ACTIONS from '../../store/actions';
 
 const ForgotPasswordComponent = () => {
-    const { changeAppState, userDetails, setUserDetails, showLoader, loader } = useContext(Context);
+    const userDetails = useSelector((state: any) => state.commonStore.userDetails);
+    const loader = useSelector((state: any) => state.commonStore.loader);
+    const dispatch = useDispatch();
     const [isValidating, setIsValidating] = useState<boolean>(false);
     const [isUsernameValidated, setIsUsernameValidated] = useState<boolean>(false);
     const username = userDetails?.username;
@@ -17,7 +19,7 @@ const ForgotPasswordComponent = () => {
 
     const handleNextClick = async () => {
         if (!username || isValidating || loader) return;
-        showLoader?.(true);
+        dispatch(ACTIONS.updateLoaderState(true));
         try {
             setIsValidating(true);
             const response: any = await checkUser({ username });
@@ -36,7 +38,7 @@ const ForgotPasswordComponent = () => {
         }
         finally {
             setIsValidating(false);
-            showLoader?.(false);
+            dispatch(ACTIONS.updateLoaderState(false));
         }
     }
 
@@ -46,22 +48,22 @@ const ForgotPasswordComponent = () => {
         const isBeforeToday = (new Date(new Date().toDateString()).getTime() - new Date(date).getTime()) > 0;
         if (!date || isBeforeToday) {
             element.classList.remove('error');
-            setUserDetails?.({ ...userDetails, dateOfBirth: date });
+            dispatch(ACTIONS.updateUserDetails({ ...userDetails, dateOfBirth: date }));
         }
         else {
             element.classList.add('error');
-            setUserDetails?.({ ...userDetails, dateOfBirth: '' });
+            dispatch(ACTIONS.updateUserDetails({ ...userDetails, dateOfBirth: '' }));
         }
     }
 
     const validateUser = async () => {
         if (!dob || isValidating) return;
-        showLoader?.(true);
+        dispatch(ACTIONS.updateLoaderState(true));
         try {
             setIsValidating(true);
             const response: any = await checkUser({ username, dob });
             if (response?.status === 200) {
-                changeAppState?.(LoginAppStates.CHANGE_PASSWORD);
+                dispatch(ACTIONS.updateAppState(LoginAppStates.CHANGE_PASSWORD));
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
@@ -75,7 +77,7 @@ const ForgotPasswordComponent = () => {
         }
         finally {
             setIsValidating(false);
-            showLoader?.(false);
+            dispatch(ACTIONS.updateLoaderState(false));
         }
     }
 
@@ -90,7 +92,7 @@ const ForgotPasswordComponent = () => {
                     disabled={isUsernameValidated}
                     placeholder='Phone, email or username'
                     value={username}
-                    onChange={(e: React.KeyboardEvent<HTMLElement>) => setUserDetails?.({ ...userDetails, username: (e.target as HTMLInputElement).value })}
+                    onChange={(e: React.KeyboardEvent<HTMLElement>) => dispatch(ACTIONS.updateUserDetails({ ...userDetails, username: (e.target as HTMLInputElement).value }))}
                     onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => { if (e.key === 'Enter' && !loader) handleNextClick() }}
                 />
                 {isUsernameValidated &&
@@ -102,8 +104,8 @@ const ForgotPasswordComponent = () => {
                             placeholder='Date of birth'
                             type='text'
                             onFocus={(e: React.MouseEvent<HTMLElement>) => { (e.target as HTMLInputElement).type = 'date' }}
-                    onBlur={(e: React.MouseEvent<HTMLElement>) => { if ((e.target as HTMLInputElement).value === '') (e.target as HTMLInputElement).type = 'text' }}
-                    onChange={handleDOBChange}
+                            onBlur={(e: React.MouseEvent<HTMLElement>) => { if ((e.target as HTMLInputElement).value === '') (e.target as HTMLInputElement).type = 'text' }}
+                            onChange={handleDOBChange}
                             onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => { if (e.key === 'Enter' && !loader) validateUser() }}
                         /></>}
                 <div className='actionsDiv'>

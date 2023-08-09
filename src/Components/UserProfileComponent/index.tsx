@@ -1,12 +1,10 @@
-import React, { useContext, useState } from 'react'
-import Context from '../../store/context';
+import React, { useState } from 'react'
 import './styles.css';
 import ProfileLeftPanel from '../ProfileLeftPanel';
-import { profileMenu } from '../../Constants/constants';
+import { profileMenu } from '../../Constants';
 
 const UserProfileComponent = () => {
     document.title = 'Home/Twitter';
-    const { userDetails } = useContext(Context);
     const [activeProfileMenu, setprofileMenu] = useState<string>(profileMenu.HOME);
     return (
         <div className='userProfileDiv'>

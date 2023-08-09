@@ -1,6 +1,6 @@
 .leftPanelDiv {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     flex-direction: column;
     flex: 1 0 auto;
     min-width: 250px;

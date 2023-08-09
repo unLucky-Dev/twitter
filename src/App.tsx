@@ -4,8 +4,7 @@ import './App.css';
 import HeaderComponent from './Components/HeaderComponent';
 import LoginComponent from './Components/LoginComponent';
 import SignupComponent from './Components/SignupComponent';
-import { LoginAppStates, toastTypes } from './Constants/constants';
-import Context from './store/context';
+import { LoginAppStates, toastTypes } from './Constants';
 import CreateAccountComponent from './Components/CreateAccountComponent';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,35 +14,23 @@ import ChangePasswordComponent from './Components/ChangePasswordComponent';
 import showMessageToast from './Components/ToastMessage/toastMessage';
 import { validateUser } from './api/twitterService';
 import UserProfileComponent from './Components/UserProfileComponent';
-import { UserDetialsType } from './types/types';
+import { useSelector, useDispatch } from 'react-redux';
+import * as ACTIONS from './store/actions';
 
 function App() {
-  const [state, setState] = React.useState<string>('');
-  const [userDetails, setUserDetails] = React.useState<UserDetialsType>({});
-  const [isUserAuthorized, setIsUserAuthorized] = React.useState<boolean>(false);
-  const [loader, showLoader] = React.useState<boolean>(false);
+  const appState = useSelector((state: any) => state.commonStore.appState);
+  const isUserAuthorized = useSelector((state: any) => state.commonStore.isUserAuthorized);
+  const loader = useSelector((state: any) => state.commonStore.loader);
 
-  const changeAppState = (appState: string) => {
-    if (![LoginAppStates.LOGIN_PASSWORD, LoginAppStates.CHANGE_PASSWORD, LoginAppStates.FORGOT_PASSWORD].includes(appState) && !isUserAuthorized) {
-      setUserDetails({ ...userDetails, username: '' });
-    }
-    setState(appState);
-  };
-
-  const logOutHandler = () => {
-    setUserDetails({});
-    setIsUserAuthorized(false);
-    localStorage.clear();
-    changeAppState(LoginAppStates.LOGIN);
-  };
+  const dispatch = useDispatch();
 
   const isValidateUser = async (username: string, password: string) => {
-    showLoader(true);
+    dispatch(ACTIONS.updateLoaderState(true));
     try {
       const response: any = await validateUser({ username, password });
       if (response?.status === 200) {
-        setIsUserAuthorized(true);
-        setUserDetails(response.data);
+        dispatch(ACTIONS.updateIsAuthorized(true));
+        dispatch(ACTIONS.updateUserDetails(response.data));
       }
       else
         throw new Error('Unauthorized');
@@ -51,10 +38,10 @@ function App() {
     catch (e) {
       localStorage.clear();
       showMessageToast(toastTypes.INFO, 'Please login to continue.');
-      changeAppState(LoginAppStates.LOGIN);
+      dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN));
     }
     finally {
-      showLoader(false);
+      dispatch(ACTIONS.updateLoaderState(false));
     }
   };
 
@@ -64,29 +51,27 @@ function App() {
     if (!isUserAuthorized && username && password)
       isValidateUser(username, password);
     else
-      changeAppState(LoginAppStates.LOGIN);
+      dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN));
   }, [isUserAuthorized]);
 
   return (
     <div className='root'>
-      <Context.Provider value={{ changeAppState, userDetails, setUserDetails, setIsUserAuthorized, logOutHandler, showLoader, loader }}>
-        {
-          Object.values(LoginAppStates).includes(state) && !isUserAuthorized && <div className='loginSignupDiv'>
-            <HeaderComponent />
-            {state === LoginAppStates.LOGIN && <LoginComponent />}
-            {state === LoginAppStates.LOGIN_PASSWORD && <LoginPasswordComponent />}
-            {state === LoginAppStates.SIGNUP && <SignupComponent />}
-            {state === LoginAppStates.CREATE_ACCOUNT && <CreateAccountComponent />}
-            {state === LoginAppStates.FORGOT_PASSWORD && <ForgotPasswordComponent />}
-            {state === LoginAppStates.CHANGE_PASSWORD && <ChangePasswordComponent />}
-          </div>
-        }
-        {
-          isUserAuthorized && <div className='root authorizedUser'>
-            <UserProfileComponent />
-          </div>
-        }
-      </Context.Provider>
+      {
+        Object.values(LoginAppStates).includes(appState) && !isUserAuthorized && <div className='loginSignupDiv'>
+          <HeaderComponent />
+          {appState === LoginAppStates.LOGIN && <LoginComponent />}
+          {appState === LoginAppStates.LOGIN_PASSWORD && <LoginPasswordComponent />}
+          {appState === LoginAppStates.CHANGE_PASSWORD && <ChangePasswordComponent />}
+          {appState === LoginAppStates.SIGNUP && <SignupComponent />}
+          {appState === LoginAppStates.CREATE_ACCOUNT && <CreateAccountComponent />}
+          {appState === LoginAppStates.FORGOT_PASSWORD && <ForgotPasswordComponent />}
+        </div>
+      }
+      {
+        isUserAuthorized && <div className='root authorizedUser'>
+          <UserProfileComponent />
+        </div>
+      }
       <ToastContainer />
       {loader && <div className='loaderDiv'><img src={require('./Icons/Loader.gif')} height='32px' alt='loader' /></div>}
     </div>

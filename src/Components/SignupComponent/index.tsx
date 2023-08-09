@@ -2,14 +2,14 @@ import './styles.css';
 import GoogleLogo from '../../Icons/GoogleLogo';
 import AppleLogo from '../../Icons/AppleLogo';
 import Button from '../Button';
-import { useContext } from 'react';
-import Context from '../../store/context';
-import { LoginAppStates } from '../../Constants/constants';
+import { LoginAppStates } from '../../Constants';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import * as ACTIONS from '../../store/actions';
 
 const SignupComponent = () => {
     document.title = 'Sign up for Twitter/Twitter';
-    const { changeAppState } = useContext(Context);
+    const dispatch = useDispatch();
     return (
         <div className='loginContentContainer'>
             <div className='loginContentDiv'>
@@ -21,12 +21,12 @@ const SignupComponent = () => {
                     <span>or</span>
                     <div className='line' />
                 </div>
-                <Button label='Create account' lableClass='btnLabel' className='btn2' onClick={() => { changeAppState?.(LoginAppStates.CREATE_ACCOUNT) }} />
+                <Button label='Create account' lableClass='btnLabel' className='btn2' onClick={() => dispatch(ACTIONS.updateAppState(LoginAppStates.CREATE_ACCOUNT))} />
                 <span className='agreementText'>By signing up, you agree to the Terms of Service and Privacy Policy, including Cookie Use.</span>
                 <div className='loginText'>
                     <span>Have an account already?</span>
                     &nbsp;
-                    <span className='loginAction' onClick={() => { changeAppState?.(LoginAppStates.LOGIN) }}>Log in</span>
+                    <span className='loginAction' onClick={() => dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN))}>Log in</span>
                 </div>
             </div>
         </div>

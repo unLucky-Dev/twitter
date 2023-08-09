@@ -4,6 +4,6 @@ export type ButtonPropType ={
     className?: string, 
     logoClass?: string, 
     lableClass?: string, 
-    onClick: (e : React.MouseEvent<HTMLElement>) => {}, 
+    onClick?: (e : React.MouseEvent<HTMLElement>) => void | {}, 
     disabled?: boolean
 }

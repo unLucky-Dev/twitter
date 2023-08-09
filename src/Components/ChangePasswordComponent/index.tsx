@@ -1,17 +1,19 @@
 import './styles.css';
 import Button from '../Button';
 import TextField from '../TextField';
-import { useContext, useState } from 'react';
-import Context from '../../store/context';
-import { LoginAppStates, toastTypes } from '../../Constants/constants';
+import { LoginAppStates, toastTypes } from '../../Constants';
 import { updatePassword } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
-import React from 'react';
+import React, { useState } from 'react';
 import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
+import { useSelector, useDispatch } from 'react-redux';
+import * as ACTIONS from '../../store/actions';
 
 const ChangePasswordComponent = () => {
-    const { changeAppState, userDetails, showLoader, loader } = useContext(Context);
+    const userDetails = useSelector((state: any) => state.commonStore.userDetails);
+    const loader = useSelector((state: any) => state.commonStore.loader);
+    const dispatch = useDispatch();
     const [password, setPassword] = useState<string>('');
     const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -23,16 +25,16 @@ const ChangePasswordComponent = () => {
 
     const handleFinish = async () => {
         setIsSubmitBtnDisabled(true);
-        showLoader?.(true);
+        dispatch(ACTIONS.updateLoaderState(true));
         try {
             const response: any = await updatePassword({ username, password, dob });
             if (response?.status === 200) {
                 showMessageToast(toastTypes.SUCCESS, `${response.data} Login to continue.`);
-                changeAppState?.(LoginAppStates.LOGIN);
+                dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN));
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
-                changeAppState?.(LoginAppStates.FORGOT_PASSWORD);
+                dispatch(ACTIONS.updateAppState(LoginAppStates.FORGOT_PASSWORD));
             }
             else
                 showMessageToast(toastTypes.ERROR, response.error ?? 'Something went wrong. Please try again.');
@@ -43,7 +45,7 @@ const ChangePasswordComponent = () => {
         }
         finally {
             setIsSubmitBtnDisabled(false);
-            showLoader?.(false);
+            dispatch(ACTIONS.updateLoaderState(false));
         }
     }
 

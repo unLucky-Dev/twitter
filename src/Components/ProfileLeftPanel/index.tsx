@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import Context from '../../store/context';
+import React from 'react'
 import './styles.css';
 import TwitterLogo from '../../Icons/TwitterLogo';
 import DefaultHomeLogo from '../../Icons/DefaultHomeLogo';
@@ -12,8 +11,10 @@ import ActiveHomeLogo from '../../Icons/ActiveHomeLogo';
 import ActiveSearchLogo from '../../Icons/ActiveSearchLogo';
 import ActiveNotificationLogo from '../../Icons/ActiveNotificationLogo';
 import ActiveProfileLogo from '../../Icons/ActiveProfileLogo';
-import { profileMenu } from '../../Constants/constants';
-import { ProfileLeftPanelType } from '../../types/types';
+import { profileMenu } from '../../Constants';
+import { ProfileLeftPanelType } from '../../types';
+import { useSelector, useDispatch } from 'react-redux';
+import * as ACTIONS from '../../store/actions';
 
 const menuLogoMap = {
     HOME: {
@@ -36,7 +37,8 @@ const menuLogoMap = {
 
 const ProfileLeftPanel = ({ activeProfileMenu, changeProfileMenu }: ProfileLeftPanelType) => {
     const [isLogOutDivVisible, setIsLogOutDivVisible] = React.useState(false);
-    const { userDetails, logOutHandler } = useContext(Context);
+    const userDetails = useSelector((state: any) => state.commonStore.userDetails);
+    const dispatch = useDispatch();
 
     const handleUserDetailClick = () => {
         const userDetailsElement = Array.from(document.getElementsByClassName('userDetailDiv') as HTMLCollectionOf<HTMLElement>)[0];
@@ -64,7 +66,7 @@ const ProfileLeftPanel = ({ activeProfileMenu, changeProfileMenu }: ProfileLeftP
                 }
                 <Button label="Tweet" className='tweetBtn' lableClass='tweetLabel' />
             </div>
-            {isLogOutDivVisible && <div id='logOutDiv' className='logoutDiv'><div className='logOutBtn' onClick={logOutHandler}>Log out @{userDetails?.username}</div></div>}
+            {isLogOutDivVisible && <div id='logOutDiv' className='logoutDiv'><div className='logOutBtn' onClick={() => dispatch(ACTIONS.logoutHandler())}>Log out @{userDetails?.username}</div></div>}
             <div className='userDetailDiv' onClick={handleUserDetailClick}>
                 <div className='imageDiv'>
                     <img className='profileImg' src={userDetails?.photo ?? userLogo} height='50px' alt='Profile' />
