@@ -1,9 +1,7 @@
 import './styles.css';
 import Button from '../../Components/Button';
 import TextField from '../../Components/TextField';
-import { LoginAppStates, toastTypes } from '../../Constants';
-import { validateUser } from '../../api/twitterService';
-import showMessageToast from '../ToastMessage/toastMessage';
+import { LoginAppStates } from '../../Constants';
 import React, { useState } from 'react';
 import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
@@ -21,29 +19,11 @@ const LoginPasswordComponent = () => {
 
     const handleLogin = async () => {
         setIsLoginDisabled(true);
-        dispatch(ACTIONS.updateLoaderState(true));
-        try {
-            const response: any = await validateUser({ username, password });
-            if (response?.status === 200) {
-                localStorage.setItem('username', username);
-                localStorage.setItem('password', password);
-                dispatch(ACTIONS.updateUserDetails(response.data));
-                dispatch(ACTIONS.updateIsAuthorized(true));
-            }
-            else if (response?.status === 404) {
-                showMessageToast(toastTypes.ERROR, response.error);
-            }
-            else
-                showMessageToast(toastTypes.ERROR, response.error ?? 'Something went wrong. Please try again.');
-        }
-        catch (e) {
-            showMessageToast(toastTypes.ERROR, 'Something went wrong. Please try again.');
-            console.log('error in handleSignUp', e);
-        }
-        finally {
-            setIsLoginDisabled(false);
-            dispatch(ACTIONS.updateLoaderState(false));
-        }
+        dispatch(ACTIONS.validateUser({
+            username, password,
+            finalCallback:
+                () => setIsLoginDisabled(false)
+        }));
     }
 
     const handleChangePassword = (e) => {

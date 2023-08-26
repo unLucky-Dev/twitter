@@ -4,7 +4,6 @@ import { LoginAppStates, toastTypes } from '../../Constants';
 import TextField from '../TextField';
 import React, { ChangeEvent, useState } from 'react';
 import { userLogo } from '../../Icons/DefaultUserLogo';
-import { addUser } from '../../api/twitterService';
 import showMessageToast from '../ToastMessage/toastMessage';
 import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
@@ -48,31 +47,6 @@ const CreateAccountComponent = () => {
         else {
             element.classList.remove('error');
             setPhone(phoneNumber);
-        }
-    }
-
-    const handleSignUp = async () => {
-        dispatch(ACTIONS.updateLoaderState(true));
-        showMessageToast(toastTypes.INFO, 'Creating Account...', 200);
-        const payload = { name, username: phone, dob, password, profileImage };
-        try {
-            const response: any = await addUser(payload);
-            if (response?.status === 201) {
-                showMessageToast(toastTypes.SUCCESS, 'Account created successfully. Login to Continue.', 500);
-                dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN));
-            }
-            else if (response?.status === 413) {
-                showMessageToast(toastTypes.ERROR, 'Image size is too large.');
-            }
-            else
-                showMessageToast(toastTypes.ERROR, response.error ?? 'Something went wrong. Please try again.');
-        }
-        catch (e) {
-            showMessageToast(toastTypes.ERROR, 'Something went wrong. Please try again.');
-            console.log('error in handleSignUp', e);
-        }
-        finally {
-            dispatch(ACTIONS.updateLoaderState(false));
         }
     }
 
@@ -176,7 +150,8 @@ const CreateAccountComponent = () => {
                     icon={() => inputFieldIcon(showConfirmPassword, setShowConfirmPassword)}
                     disabled={loader}
                 />
-                <Button label='Sign Up' lableClass='btnLabel' disabled={isSignUpDisabled || loader} onClick={handleSignUp} />
+                <Button label='Sign Up' lableClass='btnLabel' disabled={isSignUpDisabled || loader} onClick={() =>
+                    dispatch(ACTIONS.createUser({ name, username: phone, dob, password, profileImage }))} />
                 <div className='loginText'>
                     <span>Have an account already?</span>
                     &nbsp;

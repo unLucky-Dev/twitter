@@ -1,9 +1,6 @@
 import './styles.css';
 import Button from '../Button';
 import TextField from '../TextField';
-import { LoginAppStates, toastTypes } from '../../Constants';
-import { updatePassword } from '../../api/twitterService';
-import showMessageToast from '../ToastMessage/toastMessage';
 import React, { useState } from 'react';
 import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
@@ -25,28 +22,12 @@ const ChangePasswordComponent = () => {
 
     const handleFinish = async () => {
         setIsSubmitBtnDisabled(true);
-        dispatch(ACTIONS.updateLoaderState(true));
-        try {
-            const response: any = await updatePassword({ username, password, dob });
-            if (response?.status === 200) {
-                showMessageToast(toastTypes.SUCCESS, `${response.data} Login to continue.`);
-                dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN));
-            }
-            else if (response?.status === 404) {
-                showMessageToast(toastTypes.ERROR, response.error);
-                dispatch(ACTIONS.updateAppState(LoginAppStates.FORGOT_PASSWORD));
-            }
-            else
-                showMessageToast(toastTypes.ERROR, response.error ?? 'Something went wrong. Please try again.');
-        }
-        catch (e) {
-            showMessageToast(toastTypes.ERROR, 'Something went wrong. Please try again.');
-            console.log('error in handleSignUp', e);
-        }
-        finally {
-            setIsSubmitBtnDisabled(false);
-            dispatch(ACTIONS.updateLoaderState(false));
-        }
+        dispatch(ACTIONS.changePassword({
+            username,
+            password,
+            dob,
+            finalCallback: () => setIsSubmitBtnDisabled(false)
+        }));
     }
 
     const handleChangePassword = (e: React.KeyboardEvent<HTMLElement>) => {

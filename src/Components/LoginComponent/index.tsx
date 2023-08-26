@@ -3,9 +3,7 @@ import GoogleLogo from '../../Icons/GoogleLogo';
 import AppleLogo from '../../Icons/AppleLogo';
 import Button from '../../Components/Button';
 import TextField from '../../Components/TextField';
-import { LoginAppStates, toastTypes } from '../../Constants';
-import { checkUser } from '../../api/twitterService';
-import showMessageToast from '../ToastMessage/toastMessage';
+import { LoginAppStates } from '../../Constants';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import * as ACTIONS from '../../store/actions';
@@ -21,27 +19,12 @@ const LoginComponent = () => {
 
     const handleNextClick = async () => {
         if (!username || isValidating || loader) return;
-        dispatch(ACTIONS.updateLoaderState(true));
-        try {
-            setIsValidating(true);
-            const response: any = await checkUser({ username });
-            if (response?.status === 200) {
-                dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN_PASSWORD));
-            }
-            else if (response?.status === 404) {
-                showMessageToast(toastTypes.ERROR, response.error);
-            }
-            else
-                showMessageToast(toastTypes.ERROR, response.error ?? 'Something went wrong. Please try again.');
-        }
-        catch (e) {
-            showMessageToast(toastTypes.ERROR, 'Something went wrong. Please try again.');
-            console.log('error in handleSignUp', e);
-        }
-        finally {
-            setIsValidating(false);
-            dispatch(ACTIONS.updateLoaderState(false));
-        }
+        setIsValidating(true);
+        dispatch(ACTIONS.checkUser({ 
+            username, 
+            successCallback: () => dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN_PASSWORD)), 
+            finalCallback: () => setIsValidating(false)
+        }));
     }
 
     return (
