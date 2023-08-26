@@ -1,4 +1,4 @@
 export type ProfileLeftPanelType = {
-    activeProfileMenu: string, 
-    changeProfileMenu: (menu: string) => void,
+  activeProfileMenu: string;
+  changeProfileMenu: (menu: string) => void;
 };

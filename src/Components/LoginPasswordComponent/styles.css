@@ -1,48 +1,47 @@
 .loginPasswordContainer {
-    height: 596px !important;
+  height: 596px !important;
 }
 
 .loginPasswordDiv {
-    margin: 0 !important;
-    padding: 0 80px !important;
-    height: 100%;
-    ;
+  margin: 0 !important;
+  padding: 0 80px !important;
+  height: 100%;
 }
 
 .loginBtn {
-    margin-top: auto !important;
-    height: 52px !important;
-    border-radius: 27px !important;
+  margin-top: auto !important;
+  height: 52px !important;
+  border-radius: 27px !important;
 }
 
 .signUp2 {
-    margin-top: 8px !important;
-    margin-bottom: 24px !important;
+  margin-top: 8px !important;
+  margin-bottom: 24px !important;
 }
 
 .forgotPasswordAction {
-    color: #1D9BF0;
-    width: fit-content;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 16px;
-    padding-left: 8px;
+  color: #1d9bf0;
+  width: fit-content;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  padding-left: 8px;
 }
 
 .forgotPasswordAction:hover {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .loginLabel {
-    font-size: 17px !important;
-    line-height: 20px !important;
-    font-weight: 500 !important;
+  font-size: 17px !important;
+  line-height: 20px !important;
+  font-weight: 500 !important;
 }
 
 .textFieldIcon {
-    height: 20px;
-    position: absolute;
-    margin: -30px;
-    margin-top: 19px;
+  height: 20px;
+  position: absolute;
+  margin: -30px;
+  margin-top: 19px;
 }

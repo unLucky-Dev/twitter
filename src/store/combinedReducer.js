@@ -2,7 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 import commonStore from './reducer';
 
 const rootReducer = combineReducers({
-    commonStore
+  commonStore,
 });
 
 export default rootReducer;

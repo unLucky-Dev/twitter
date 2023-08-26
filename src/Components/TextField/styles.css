@@ -7,7 +7,7 @@
   border: 1px solid #333639;
   border-radius: 4px;
   height: 54px;
-  color: #E7E9EA;
+  color: #e7e9ea;
   font-size: 17px;
   font-weight: 400;
   padding: 0 8px;
@@ -31,4 +31,4 @@
 
 input[type='date']::-webkit-calendar-picker-indicator {
   filter: invert(1);
-} 
+}

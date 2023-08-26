@@ -1,65 +1,65 @@
 .createAccountContainer {
-    margin: 0 !important;
-    padding: 0 80px !important;
+  margin: 0 !important;
+  padding: 0 80px !important;
 }
 
 .loginText {
-    color: rgb(113, 118, 123);
-    margin-top: 12px;
-    font-size: 15px;
-    font-weight: 400;
-    font-family: inherit;
-    line-height: 20px;
+  color: rgb(113, 118, 123);
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 20px;
 }
 
 .loginText .loginAction {
-    color: #1D9BF0;
+  color: #1d9bf0;
 }
 
 .loginText .loginAction:hover {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .agreementText {
-    color: rgb(113, 118, 123);
-    font-size: 13px;
-    font-weight: 400;
-    font-family: inherit;
-    line-height: 16px;
+  color: rgb(113, 118, 123);
+  font-size: 13px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 16px;
 }
 
 .headerWithImage {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .imageDiv {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    overflow: hidden;
-    width: 72px;
-    height: 72px;
-    cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 72px;
+  height: 72px;
+  cursor: pointer;
 }
 
 .removeProfilePic {
-    display: none;
-    position: absolute;
-    height: 16px;
-    border: 1px solid #a0a0a0b8;
-    border-radius: 50%;
-    margin-bottom: 60px;
-    margin-left: 60px;
-    background: #8a8a8ab8;
+  display: none;
+  position: absolute;
+  height: 16px;
+  border: 1px solid #a0a0a0b8;
+  border-radius: 50%;
+  margin-bottom: 60px;
+  margin-left: 60px;
+  background: #8a8a8ab8;
 }
 
 .profileImg:hover + .removeProfilePic {
-    display: block;
+  display: block;
 }
 
 .removeProfilePic:hover {
-    display: block;
+  display: block;
 }
