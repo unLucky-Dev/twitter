@@ -17,7 +17,7 @@ const commonStore = (state = initialState, action) => {
     switch (action.type) {
         case TYPES.UPDATE_APP_STATE: {
             const updatedState = { ...state };
-            if (![LoginAppStates.LOGIN_PASSWORD, LoginAppStates.CHANGE_PASSWORD, LoginAppStates.FORGOT_PASSWORD].includes(state.appState) && !state.isUserAuthorized) {
+            if (![LoginAppStates.LOGIN_PASSWORD, LoginAppStates.CHANGE_PASSWORD, LoginAppStates.FORGOT_PASSWORD].includes(action.payload) && !state.isUserAuthorized) {
                 updatedState.userDetails = { ...state.userDetails, username: '' }
             }
 

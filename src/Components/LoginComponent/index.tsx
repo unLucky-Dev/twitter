@@ -26,7 +26,7 @@ const LoginComponent = () => {
             setIsValidating(true);
             const response: any = await checkUser({ username });
             if (response?.status === 200) {
-                dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN));
+                dispatch(ACTIONS.updateAppState(LoginAppStates.LOGIN_PASSWORD));
             }
             else if (response?.status === 404) {
                 showMessageToast(toastTypes.ERROR, response.error);
