@@ -2,18 +2,19 @@
 import React, { useEffect } from 'react';
 import './App.css';
 import HeaderComponent from './Components/HeaderComponent';
-import LoginComponent from './Components/LoginComponent';
-import SignupComponent from './Components/SignupComponent';
+import LoginComponent from './Containers/LoginComponent';
+import SignupComponent from './Containers/SignupComponent';
 import { LoginAppStates } from './Constants';
-import CreateAccountComponent from './Components/CreateAccountComponent';
+import CreateAccountComponent from './Containers/CreateAccountComponent';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LoginPasswordComponent from './Components/LoginPasswordComponent';
-import ForgotPasswordComponent from './Components/ForgotPasswordComponent';
-import ChangePasswordComponent from './Components/ChangePasswordComponent';
-import UserProfileComponent from './Components/UserProfileComponent';
+import LoginPasswordComponent from './Containers/LoginPasswordComponent';
+import ForgotPasswordComponent from './Containers/ForgotPasswordComponent';
+import ChangePasswordComponent from './Containers/ChangePasswordComponent';
+import UserProfileComponent from './Containers/UserProfileComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import * as ACTIONS from './store/actions';
+import Loader from './Components/Loader';
 
 function App() {
   const appState = useSelector((state: any) => state.commonStore.appState);
@@ -57,7 +58,7 @@ function App() {
       <ToastContainer />
       {loader && (
         <div className="loaderDiv">
-          <img src={require('./Icons/Loader.gif')} height="32px" alt="loader" />
+          <Loader />
         </div>
       )}
     </div>

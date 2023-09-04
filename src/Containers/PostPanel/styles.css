@@ -1,0 +1,23 @@
+.postsPanel {
+  border-left: 1px solid rgb(47, 51, 54);
+  border-right: 1px solid rgb(47, 51, 54);
+  flex: 2 0 auto;
+  min-width: 650px;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.postsPanel::-webkit-scrollbar {
+  display: none;
+}
+
+.postsPanel > * {
+  padding: 0 12px;
+}
+
+.separator {
+  display: flex;
+  background: rgb(47, 51, 54);
+  height: 1px;
+}

@@ -1,10 +1,10 @@
 import './styles.css';
-import Button from '../Button';
+import Button from '../../Components/Button';
 import { LoginAppStates, toastTypes } from '../../Constants';
-import TextField from '../TextField';
+import TextField from '../../Components/TextField';
 import React, { ChangeEvent, useState } from 'react';
 import { userLogo } from '../../Icons/DefaultUserLogo';
-import showMessageToast from '../ToastMessage/toastMessage';
+import showMessageToast from '../../Components/ToastMessage/toastMessage';
 import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';
 import CloseIcon from '../../Icons/CloseIcon';

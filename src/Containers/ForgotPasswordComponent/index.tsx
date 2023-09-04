@@ -1,6 +1,6 @@
 import './styles.css';
-import Button from '../Button';
-import TextField from '../TextField';
+import Button from '../../Components/Button';
+import TextField from '../../Components/TextField';
 import { LoginAppStates } from '../../Constants';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';

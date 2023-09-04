@@ -5,7 +5,7 @@ import DefaultHomeLogo from '../../Icons/DefaultHomeLogo';
 import DefaultSearchLogo from '../../Icons/DefaultSearchLogo';
 import DefaultNotificationLogo from '../../Icons/DefaultNotificationLogo';
 import DefaultProfileLogo from '../../Icons/DefaultProfileLogo';
-import Button from '../Button';
+import Button from '../../Components/Button';
 import { userLogo } from '../../Icons/DefaultUserLogo';
 import ActiveHomeLogo from '../../Icons/ActiveHomeLogo';
 import ActiveSearchLogo from '../../Icons/ActiveSearchLogo';

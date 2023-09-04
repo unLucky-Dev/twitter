@@ -1,6 +1,6 @@
 import './styles.css';
-import Button from '../Button';
-import TextField from '../TextField';
+import Button from '../../Components/Button';
+import TextField from '../../Components/TextField';
 import React, { useState } from 'react';
 import ShowPassword from '../../Icons/showPassword';
 import HidePassword from '../../Icons/HidePassword';

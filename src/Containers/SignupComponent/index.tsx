@@ -1,7 +1,7 @@
 import './styles.css';
 import GoogleLogo from '../../Icons/GoogleLogo';
 import AppleLogo from '../../Icons/AppleLogo';
-import Button from '../Button';
+import Button from '../../Components/Button';
 import { LoginAppStates } from '../../Constants';
 import React from 'react';
 import { useDispatch } from 'react-redux';

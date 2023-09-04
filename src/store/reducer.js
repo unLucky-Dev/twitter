@@ -2,7 +2,7 @@ import * as TYPES from './actionConstants';
 import { LoginAppStates } from '../Constants';
 
 const initialState = {
-  appState: 'login',
+  appState: '',
   userDetails: {
     dateOfBirth: '',
     name: '',
